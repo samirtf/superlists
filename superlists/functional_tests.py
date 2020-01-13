@@ -1,12 +1,12 @@
-from selenium import webdriver
+# from selenium import webdriver
 
-browser = webdriver.Firefox()
+# browser = webdriver.Firefox()
 
 # Fulano has heard of an interesting new To-Do list online application. He decided to check his homepage.
-browser.get('http://localhost:8000/')
+# browser.get('http://localhost:8000/')
 
 # He realizes that the page title and header mention to-do lists.
-assert 'To-Do' in browser.title
+# assert 'To-Do' in browser.title
 
 # What I call functional tests, some people prefer to call acceptance tests or end-to-end tests. The bottom line is that these types of tests look at how the whole application works from the outside. Another term used is black box test, because the test knows nothing about the inside of the sustem under test.
 
@@ -22,4 +22,31 @@ assert 'To-Do' in browser.title
 
 # One option would be to use the second parameter of the assert reserved word - something like:
 # assert 'To-Do' in browser.title, "Browser title was " + browser.title
+
+
+from selenium import webdriver
+import unittest
+
+class NewVisitorTest(unittest.TestCase):
+
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+
+    def tearDown(self):
+        self.browser.quit()
+
+    def test_can_start_a_list_and_retrieve_it_later(self):
+       # Fulano has heard of an interesting new To-Do list online application.
+       # He decided to check his homepage.
+       self.browser.get('http://localhost:8000/')
+
+       # He realizes that the page title and header mention to-do lists.
+       self.assertIn('To-Do', self.browser.title)
+       self.fail('Finish the test!')
+
+       # ....
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
+
 
