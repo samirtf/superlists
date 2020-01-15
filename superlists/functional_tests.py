@@ -65,17 +65,30 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows),
-            "New to-do item did not appear in table"
-        )
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
         # There is still a text box encouraging him to add another item.
         # He inserts "Use peacock feathers to make a fly"
         # (Use peacock feathers to fly - Fulano is very methodical)
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('Use peacock feathers to make a fly')
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        # The page refreshes again and now shows both items in your list.
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.assertIn('2: Use peacock feathers to make a fly',
+            [row.text for row in rows]
+        )
+
+        # So-and-so wonders if the site will remember your list.
+        # Then he notices that the site generated a unique URL 
+        # for her - there's a lilttle explanatoory text for that.
         self.fail('Finish the test!')
 
-        # ....
+        # He accesses this URL - his to-do list is still there.
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
