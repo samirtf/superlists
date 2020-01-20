@@ -5,10 +5,6 @@ from django.http import HttpRequest
 from lists.views import home_page
 from lists.models import Item
 
-# Create your tests here.
-#class SmokeTest(TestCase):
-#    def test_bas_maths(self):
-#        self.assertEqual(1 + 1, 3)
 
 class HomePageTest(TestCase):
 
@@ -32,6 +28,7 @@ class HomePageTest(TestCase):
         self.client.get('/')
         self.assertEqual(Item.objects.count(), 0)
 
+class ListViewTest(TestCase):
     def test_displays_all_list_items(self):
         Item.objects.create(text='itemey 1')
         Item.objects.create(text='itemey 2')
