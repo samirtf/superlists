@@ -55,7 +55,7 @@ class NewVisitorTest(LiveServerTestCase):
                     raise e
                 time.sleep(0.5)
 
-    def test_can_start_a_list_and_retrieve_it_later(self):
+    def test_can_start_a_list_for_one_user(self):
         # Fulano has heard of an interesting new To-Do list online application.
         # He decided to check his homepage.
         self.browser.get(self.live_server_url)
@@ -95,20 +95,10 @@ class NewVisitorTest(LiveServerTestCase):
         # So-and-so wonders if the site will remember your list.
         # Then he notices that the site generated a unique URL 
         # for her - there's a lilttle explanatoory text for that.
-        self.fail('Finish the test!')
+        ### self.fail('Finish the test!')
 
         # He accesses this URL - his to-do list is still there.
 
-
-    def test_can_start_a_list_for_user(self):
-        # He heard about an interesting new online task list application. 
-        # She decides.
-        
-        # The page is refreshed again and now shows the two items in your list.
-        self.wait_for_row_in_a_list_table('2: Use peacock feathers to make a fly')
-        self.wait_for_row_in_a_list_table('1: Buy peacock feathers')
-
-        # Satisfied, he goes back to sleep.
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         # He starts a new task list.
