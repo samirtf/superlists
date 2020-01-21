@@ -1,0 +1,4 @@
+# Adjust the model so that items are associated with different lists.
+# Add unique URLs to each list.
+# Add a URL to create a new list via POST.
+# Add URLs to add a new item to an existing list via POST.

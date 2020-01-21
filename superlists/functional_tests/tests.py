@@ -55,7 +55,7 @@ class NewVisitorTest(LiveServerTestCase):
                     raise e
                 time.sleep(0.5)
 
-    def test_can_start_a_list_and_retrieve_it_later(self):
+    def test_can_start_a_list_for_one_user(self):
         # Fulano has heard of an interesting new To-Do list online application.
         # He decided to check his homepage.
         self.browser.get(self.live_server_url)
@@ -95,7 +95,50 @@ class NewVisitorTest(LiveServerTestCase):
         # So-and-so wonders if the site will remember your list.
         # Then he notices that the site generated a unique URL 
         # for her - there's a lilttle explanatoory text for that.
-        self.fail('Finish the test!')
+        ### self.fail('Finish the test!')
 
         # He accesses this URL - his to-do list is still there.
 
+
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        # He starts a new task list.
+        self.browser.get(self.live_server_url)
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('Buy peacock feathers')
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: Buy peacock feathers')
+
+        # He realizes that her list has a unique URL.
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
+
+        # Now a new user, Francis, arrives on the site.
+
+        # We use a new browser session to ensure that no information from Edith is coming from cookies.
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Francis accesses the home page. There is no sign of Edith's list.
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('make a fly', page_text)
+
+        # Francis starts a new list by inserting a new item. He's less interesting than Edith.
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('Buy milk')
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: Buy milk')
+
+        # Francis gets his own unique URL.
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, 'lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        # Again, there is no sign of Edith's list.
+        page_text = self.browser.fund_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertIn('Buy milk', page_text)
+
+        # Satisfied, they both go back to sleep.
+        
